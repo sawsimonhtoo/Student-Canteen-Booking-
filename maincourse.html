@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Main Course - MIT Canteen</title>
+  <link rel="stylesheet" href="styles.css" />
+  
+</head>
+<body>
+  <ul id="cart-items"></ul>
+  <div>
+    <h2 class="canteen">MIT Student Canteen</h2>
+  </div>
+
+  <div class="menu-buttons">
+    <button class="shadow-button" onclick="window.location.href='main-course.html'">Main-Course</button>
+    <button class="shadow-button" onclick="window.location.href='beverages.html'" >Beverages</button>
+    <button class="shadow-button" onclick="window.location.href='snacks.html'"> Snack</button>
+    <button class="shadow-button" onclick="window.location.href='desserts.html'">Dessert</button>
+    
+  </div>
+
+  <div class="menu-container">
+    <div class="menu-items">
+      <div class="item" data-name="mong hin kha" data-price="5000">
+        <img src="Mohinga.jpeg">
+        <h4>Monghin Kha</h4>
+        <p>Price - 5000 kyats</p>
+        <button onclick="addToCart(this)"><b>Add</b></button>
+      </div>
+
+      <div class="item" data-name="Nan Gyi Thoke" data-price="4000">
+        <img src="Nan Gyi Thoke.jpeg">
+        <h4>Nan Gyi Thoke</h4>
+        <p>Price - 4000 kyats</p>
+        <button onclick="addToCart(this)"><b>Add</b></button>
+      </div>
+
+      <div class="item" data-name="Tofu Noodles" data-price="6000">
+        <img src="Tofu Noodles.jpeg">
+        <h4>Tofu Noodles</h4>
+        <p>Price - 6000 kyats</p>
+        <button onclick="addToCart(this)"><b>Add</b></button>
+      </div>
+
+      <div class="item" data-name="Shan Noodles" data-price="6000">
+        <img src="Shan Noodles.jpeg">
+        <h4>Shan Noodles</h4>
+        <p>Price - 6000 kyats</p>
+        <button onclick="addToCart(this)"><b>Add</b></button>
+      </div>
+
+      <div class="item" data-name="Green tea leaf Rice" data-price="3500">
+        <img src="Green tea leaf Rice.jpeg">
+        <h4>Green tea leaf Rice</h4>
+        <p>Price - 3500 kyats</p>
+        <button onclick="addToCart(this)"><b>Add</b></button>
+      </div>
+
+      <div class="item" data-name="Seafood Fried Rice" data-price="7000">
+        <img src="Seafood Fried Rice.jpeg">
+        <h4>Seafood Fried Rice</h4>
+        <p>Price - 7000 kyats</p>
+        <button onclick="addToCart(this)"><b>Add</b></button>
+      </div>
+
+      <div class="item" data-name="Kyay Oh" data-price="6000">
+        <img src="Kyay Oh.jpeg">
+        <h4>Kyay Oh</h4>
+        <p>Price - 6000 kyats</p>
+        <button onclick="addToCart(this)"><b>Add</b></button>
+      </div>
+
+      <div class="item" data-name="Mala Xiang Guo" data-price="10000">
+        <img src="Mala Xiang Guo.jpeg">
+        <h4>Mala Xiang Guo</h4>
+        <p>Price - 10000 kyats</p>
+        <button onclick="addToCart(this)"><b>Add</b></button>
+      </div>
+
+      <div class="item" data-name="Fried Noodle" data-price="6000">
+        <img src="Fried Noodle.jpg">
+        <h4>Fried Noodle</h4>
+        <p>Price - 6000 kyats</p>
+        <button onclick="addToCart(this)"><b>Add</b></button>
+      </div>
+
+      <div class="item" data-name="Omelet Rice" data-price="3000">
+        <img src="Omelet Rice.jpeg">
+        <h4>Omelet Rice</h4>
+        <p>Price - 3000 kyats</p>
+        <button onclick="addToCart(this)"><b>Add</b></button>
+      </div>
+
+      <div class="item" data-name="Vermicelli Soup" data-price="4500">
+        <img src="Vermicelli Soup.jpeg">
+        <h4>Vermicelli Soup</h4>
+        <p>Price - 4500 kyats</p>
+        <button onclick="addToCart(this)"><b>Add</b></button>
+      </div>
+
+      <div class="item" data-name="Hta ma nae" data-price="5000">
+        <img src="Hta ma nae.jpeg">
+        <h4>Hta Ma Nae</h4>
+        <p>Price - 5000 kyats</p>
+        <button onclick="addToCart(this)"><b>Add</b></button>
+      </div>
+
+
+
+    </div>
+
+    <div class="cart">
+      <h3 class="center">Chart</h3>
+      <ul id="cart-list"></ul>
+      <button class="submit" onclick="submitOrder()">Submit order</button>
+    </div>
+  </div>
+
+  <script>
+  // Load existing cart from localStorage or start new
+  let cart = [];
+
+  // Run this when page is loaded
+  window.onload = function () {
+    const storedCart = localStorage.getItem('cart');
+    if (storedCart) {
+      cart = JSON.parse(storedCart);
+    }
+    renderCart();
+  };
+
+  // Add item to cart
+  function addToCart(button) {
+    const item = button.parentElement;
+    const name = item.getAttribute('data-name');
+    const price = item.getAttribute('data-price');
+
+    // Add to cart
+    cart.push({ name, price });
+
+    // Save to localStorage
+    localStorage.setItem('cart', JSON.stringify(cart));
+
+    // Update the cart UI
+    renderCart();
+  }
+
+  //  cart items
+  function renderCart() {
+    const cartList = document.getElementById("cart-list");
+    if (!cartList) return;
+    cartList.innerHTML = "";
+
+    cart.forEach((item, index) => {
+      const li = document.createElement("li");
+      li.textContent = `${item.name} - ${item.price} kyats `;
+
+      // Create remove button
+      const removeBtn = document.createElement("button");
+      removeBtn.textContent = "x";
+      removeBtn.style.marginLeft = "10px";
+      removeBtn.style.background = "#4a0f0f";
+      removeBtn.style.color = "white";
+      removeBtn.style.border = "none";
+      removeBtn.style.borderRadius = "5px";
+      removeBtn.style.cursor = "pointer";
+      removeBtn.onclick = () => removeFromCart(index);
+
+      li.appendChild(removeBtn);
+      cartList.appendChild(li);
+    });
+  }
+
+  // Remove item from cart
+  function removeFromCart(index) {
+    cart.splice(index, 1); // Remove item by index
+    localStorage.setItem('cart', JSON.stringify(cart)); // Save updated cart
+    renderCart(); 
+
+  }
+
+  // Submit order and clear cart
+  function submitOrder() {
+    if (cart.length === 0) {
+      alert("Your cart is empty!");
+      return;
+    }
+
+    let orderSummary = "Order Summary:\n";
+    cart.forEach(item => {
+      orderSummary += `${item.name} - ${item.price} kyats\n`;
+    });
+
+    alert(orderSummary);
+
+    // Clear cart
+    cart = [];
+    localStorage.removeItem('cart');
+    renderCart();
+  }
+
+</script>
+
+</body>
+</html>
